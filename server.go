@@ -1,23 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"html"
-	"log"
-	"net/http"
+    "log"
+    "net/http"
 )
 
-func main() {
+func redirect(w http.ResponseWriter, r *http.Request) {
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	})
-
-	http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request){
-		fmt.Fprintf(w, "Hi")
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
+    http.Redirect(w, r, "http://github.com/GamerCyl0/server000/blob/main/server.go", 302)
 }
-#server000
+
+func main() {
+    http.HandleFunc("/", redirect)
+    err := http.ListenAndServe(":8080", nil)
+    if err != nil {
+        log.Fatal("ListenAndServe: ", err)
+    }
+}
